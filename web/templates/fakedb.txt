@@ -1,0 +1,73 @@
+<script>
+function createCard(data) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.innerHTML = `
+    <img src="${data.imageUrl}" alt="${data.phoneModel}">
+    <h3>${data.phoneModel}</h3>
+    <p>Ram: ${data.ram} Storage: ${data.storage}</p>
+    <div class="price">${data.price}đ</div>
+    <div class="location">${data.location}</div>
+  `;
+  return card;
+}
+
+const cardsData = [
+  {
+    imageUrl: 'https://media3.scdn.vn/img4/2022/09_28/jZb9ul7ZnqJGy0ODQ6fz_simg_de2fe0_250x250_maxb.jpg', // Update with your image URL
+    phoneModel: 'Oppo A31',
+    ram: '8GB',
+    storage: '256GB',
+    price: '1.850.000',
+    location: 'Hà Nội'
+  },
+  {
+    imageUrl: 'https://media3.scdn.vn/img4/2022/09_28/jZb9ul7ZnqJGy0ODQ6fz_simg_de2fe0_250x250_maxb.jpg', // Update with your image URL
+    phoneModel: 'Oppo A31',
+    ram: '8GB',
+    storage: '256GB',
+    price: '1.850.000',
+    location: 'Hà Nội'
+  },
+  {
+    imageUrl: 'https://media3.scdn.vn/img4/2022/09_28/jZb9ul7ZnqJGy0ODQ6fz_simg_de2fe0_250x250_maxb.jpg', // Update with your image URL
+    phoneModel: 'Oppo A31',
+    ram: '8GB',
+    storage: '256GB',
+    price: '1.850.000',
+    location: 'Hà Nội'
+  },
+  {
+    imageUrl: 'https://media3.scdn.vn/img4/2022/09_28/jZb9ul7ZnqJGy0ODQ6fz_simg_de2fe0_250x250_maxb.jpg', // Update with your image URL
+    phoneModel: 'Oppo A31',
+    ram: '8GB',
+    storage: '256GB',
+    price: '1.850.000',
+    location: 'Hà Nội'
+  },
+  {
+    imageUrl: 'https://media3.scdn.vn/img4/2022/09_28/jZb9ul7ZnqJGy0ODQ6fz_simg_de2fe0_250x250_maxb.jpg', // Update with your image URL
+    phoneModel: 'Oppo A31',
+    ram: '8GB',
+    storage: '256GB',
+    price: '1.850.000',
+    location: 'Hà Nội'
+  },
+  {
+    imageUrl: 'https://media3.scdn.vn/img4/2022/09_28/jZb9ul7ZnqJGy0ODQ6fz_simg_de2fe0_250x250_maxb.jpg', // Update with your image URL
+    phoneModel: 'Oppo A31',
+    ram: '8GB',
+    storage: '256GB',
+    price: '1.850.000',
+    location: 'Hà Nội'
+  },
+  // Add more card data objects here
+];
+
+const cardsContainer = document.getElementById('cards-container');
+
+cardsData.forEach(cardData => {
+  const cardElement = createCard(cardData);
+  cardsContainer.appendChild(cardElement);
+});
+</script>
