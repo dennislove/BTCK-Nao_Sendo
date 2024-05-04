@@ -1,5 +1,7 @@
-FROM python
+FROM python:3.9-slim
+WORKDIR /app
+COPY ./requirements.txt /app/requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+COPY . /app
 
-COPY . ./api
-RUN pip install fastapi uvicorn
-CMD ["uvicorn", "db_api:app", "--host", "0.0.0.0:8000"]
+CMD ["python", "app.py"]

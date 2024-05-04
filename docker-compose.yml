@@ -9,5 +9,11 @@ services:
     container_name: mysql_api_container
     build: ./mysql
     ports:
-      - "9000:8000"
-    
+      - "5001:5001"
+  data_crawling:
+    container_name: data_crawling
+    build: ./data_crawling
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mysql_api
