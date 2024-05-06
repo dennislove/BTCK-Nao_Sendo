@@ -1,13 +1,16 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 import requests
+import logging
 import mysql.connector as conn
 
 app = Flask(__name__)
 
+logging.basicConfig(filename='flask_app.log', level=logging.INFO)
+
 @app.route('/')
 def index():
-    return "Hello to db_api!"
-
+    app.logger.info('Accessed the index route') 
+    return "Hello to mysql_api!"
 
 def connect_to_db():
     db_config = { 
@@ -20,8 +23,7 @@ def connect_to_db():
     return conn.connect(**db_config)
 
 def get_products_from_crawling():
-    # products = get_products()
-    url = 'http://localhost:5000/get_products'
+    url = 'http://data_crawling:5000/get_products'
     products = requests.get(url).json()
     return products
 
@@ -67,11 +69,6 @@ def fetch():
     
 @app.route('/list')
 def list_products():
-    return get_products_from_crawling()
-    
-@app.route('/products')
-def list_products_json_form():
-    fetch()
     try:
         connection = connect_to_db()
         cursor = connection.cursor()
@@ -83,30 +80,69 @@ def list_products_json_form():
                      'image': product[4]} for product in cursor.fetchall()]
         cursor.close()
         connection.close()
-        return products
+        return jsonify(products)
     except conn.Error as e:
         print(e)
         return {"error": str(e)}
         
 def test():
     url = 'http://localhost:5000/get_products'
-
-    # Gửi yêu cầu GET đến API
     response = requests.get(url)
-
-    # Kiểm tra mã trạng thái HTTP để đảm bảo yêu cầu thành công
     if response.status_code == 200:
-        # Xử lý dữ liệu trả về
         data = response.json()
         print(data)
     else:
         print(f'Failed to retrieve data: {response.status_code}')
-    
-    
+
+@app.route('/search')
+def search_products():
+    try:
+        search_query = request.args.get('query', '')
+        connection = connect_to_db()
+        cursor = connection.cursor()       
+        sql_query = "SELECT * FROM products WHERE name LIKE %s"
+        cursor.execute(sql_query, ('%' + search_query + '%',))  
+        products = [{'product_id': product[0],
+                     'name': product[1],
+                     'price': product[2],
+                     'quantity': product[3],
+                     'image': product[4]} for product in cursor.fetchall()]      
+        cursor.close()
+        connection.close()        
+        return jsonify(products)
+    except conn.Error as e:
+        app.logger.error(e)
+        return {"error": str(e)}
+        
+def get_products_from_db():
+    try:
+        connection = connect_to_db()
+        cursor = connection.cursor() 
+        cursor.execute("SELECT * FROM products")
+        products = [{'product_id': product[0],
+                     'name': product[1],
+                     'price': product[2],
+                     'quantity': product[3],
+                     'image': product[4]} for product in cursor.fetchall()]  
+        cursor.close()
+        connection.close()
+        return products
+    except conn.Error as e:
+        app.logger.error(e)
+        return {"error": str(e)}
+@app.route("/demo")
+def demo():
+    global products
+    demo = { 
+        "/" : index(),
+        "/crawling": get_products_from_crawling(),
+        "quantity": get_quantiny(),
+        "/products": get_products_from_db(),
+        "/search": search_products(),
+    }
+    return demo
 def main(host='0.0.0.0', port=5001):
     app.run(debug=True, host=host, port=port)
-    
+
 if __name__ == "__main__":
-    # test()
     main()
-    

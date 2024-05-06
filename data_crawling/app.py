@@ -17,7 +17,7 @@ def get_products():
     data1 = crawling("https://recommend-api.sendo.vn/web/listing/recommend/internal?track_id=06e0e029-b875-4764-8d54-e0ac6570928e&p=1&s=100&cate_path=thoi-trang-nu&sort_type=vasup_desc&platform=desktop2&app_verion=2.39.3&session_key=1714816781570&version=v2&is_new_listing=2")       
     data2 = crawling("https://recommend-api.sendo.vn/web/listing/recommend/internal?track_id=06e0e029-b875-4764-8d54-e0ac6570928e&p=2&s=100&cate_path=thoi-trang-nu&sort_type=vasup_desc&platform=desktop2&app_verion=2.39.3&session_key=1714816781570&version=v2&is_new_listing=2")
     data3 = crawling("https://recommend-api.sendo.vn/web/listing/recommend/internal?track_id=06e0e029-b875-4764-8d54-e0ac6570928e&p=3&s=100&cate_path=thoi-trang-nu&sort_type=vasup_desc&platform=desktop2&app_verion=2.39.3&session_key=1714816781570&version=v2&is_new_listing=2")
-    data = data1+data2+data3
+    data = data1+data2
     seen_ids = set()
     products = []
     for product in data:

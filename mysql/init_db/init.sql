@@ -1,10 +1,10 @@
 CREATE DATABASE local_db;
 USE local_db;
 CREATE TABLE products (
-    products_id int not NULL,
-    `name` varchar(255) NOT NULL DEFAULT '',
-    price int(10) NOT NULL,
-    quanity int(10) NOT NULL,
-    image_url varchar(255) NOT NULL DEFAULT '',
-    PRIMARY KEY (products_id)
+    product_id int NOT NULL,
+    `name` nvarchar(300) NOT NULL DEFAULT '',
+    price float NOT NULL,
+    quantity float NOT NULL,
+    `image` nvarchar(300) NOT NULL DEFAULT '',
+    PRIMARY KEY (product_id)
 );

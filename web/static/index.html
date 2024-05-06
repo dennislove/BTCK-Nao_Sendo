@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Card Interface</title>
+<link rel="stylesheet" href="../static/style.css">
+<!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+
+
+</head>
+<body>
+<div class="">
+  <header class="header">
+    <div class="logo">Sendo</div>
+    <div class="search-bar">
+      <input type="text" placeholder="Tìm kiếm sản phẩm..." id="search-input">
+      <button class="search-btn"><i class="fa fa-search"></i></button>
+    </div>
+    <div class="header-icons">
+      <!-- <a href="#" class="cart-icon"><i class="fa fa-shopping-cart"></i></a> -->
+      <button class="login-btn">Đăng nhập</button>
+    </div>
+  </header>
+  <div class="body">
+    <div class="container">
+      <div class="left">
+        <div class="sidebar">
+          <h3>Lọc theo địa điểm</h3>
+          <div class="checkbox-group">
+            <input type="checkbox" id="hanoi" name="location" value="Hà Nội">
+            <label for="hanoi">Hà Nội</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="danang" name="location" value="Đà Nẵng">
+            <label for="danang">Đà Nẵng</label>
+          </div>
+          <div class="checkbox-group">
+            <input type="checkbox" id="hochiminh" name="location" value="Hồ Chí Minh">
+            <label for="hochiminh">Hồ Chí Minh</label>
+          </div>
+        </div>
+      </div>
+  
+        <div class="right">
+          <div class="selector">
+            <span>Sắp xếp theo:</span>
+            <select name="sort" id="sort">
+              <option value="" >Đề cử</option>
+              <option value="top-sale" >Bán chạy</option>
+              <option value="price-desc" >Giá thấp</option>
+              <option value="price-asc" >Giá cao</option>
+              <option value="likesview" >Lượt yêu thích</option>
+            </select>
+          </div>
+          <div class="card-container" id="cards-container">
+            <!-- Cards will be inserted here using JavaScript -->
+        </div>
+        </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const cardsData = [
+  {
+    imageUrl: 'https://media3.scdn.vn/img4/2022/09_28/jZb9ul7ZnqJGy0ODQ6fz_simg_de2fe0_250x250_maxb.jpg', // Update with your image URL
+    phoneModel: 'Samsung A31',
+    ram: '8GB',
+    storage: '256GB',
+    price: '1.850.000',
+    location: 'Hà Nội'
+  },
+  {
+    imageUrl: 'https://media3.scdn.vn/img4/2022/09_28/jZb9ul7ZnqJGy0ODQ6fz_simg_de2fe0_250x250_maxb.jpg', // Update with your image URL
+    phoneModel: 'Iphone A31',
+    ram: '8GB',
+    storage: '256GB',
+    price: '1.850.000',
+    location: 'Hà Nội'
+  },
+  {
+    imageUrl: 'https://media3.scdn.vn/img4/2022/09_28/jZb9ul7ZnqJGy0ODQ6fz_simg_de2fe0_250x250_maxb.jpg', // Update with your image URL
+    phoneModel: 'Oppo A31',
+    ram: '8GB',
+    storage: '256GB',
+    price: '1.850.000',
+    location: 'Hà Nội'
+  }
+  // Add more card data objects here
+];
+  
+function createCard(data) {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <img src="${data.imageUrl}" alt="${data.phoneModel}">
+      <h3>${data.phoneModel}</h3>
+      <p>Ram: ${data.ram} Storage: ${data.storage}</p>
+      <div class="price">${data.price}đ</div>
+      <div class="location">${data.location}</div>
+    `;
+    return card;
+}
+const cardsContainer = document.getElementById('cards-container');
+
+cardsData.forEach(cardData => {
+  const cardElement = createCard(cardData);
+  cardsContainer.appendChild(cardElement);
+});
+
+  // Hàm này sẽ gọi API và lấy dữ liệu sản phẩm
+
+  // function loadProducts(query = '') {
+  //   fetch(`/api/products?query=${query}`)  // Đây là endpoint mà Flask cung cấp
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       // Loại bỏ dữ liệu cũ và thêm dữ liệu mới từ API vào container
+  //       const cardsContainer = document.getElementById('cards-container');
+  //       cardsContainer.innerHTML = ''; // Xóa dữ liệu cũ trước khi thêm mới
+  //       data.forEach(cardData => {
+  //         const cardElement = createCard(cardData);
+  //         cardsContainer.appendChild(cardElement);
+  //       });
+  //     })
+  //     .catch(error => console.error('Error:', error));
+  // }
+  
+  // // Gọi hàm loadProducts khi trang được tải xong
+  // document.addEventListener('DOMContentLoaded', loadProducts);
+
+//test search
+
+// Function to display filtered products
+function loadProducts(query = '') {
+  const cardsContainer = document.getElementById('cards-container');
+  cardsContainer.innerHTML = ''; // Clear the container
+  const filteredData = cardsData.filter(card => card.phoneModel.toLowerCase().includes(query.toLowerCase()));
+  filteredData.forEach(cardData => {
+    const cardElement = createCard(cardData);
+    cardsContainer.appendChild(cardElement);
+  });
+}
+
+//hàm search
+function handleSearch() {
+  const searchInput = document.getElementById('search-input');
+  loadProducts(searchInput.value);
+}
+
+document.getElementById('search-input').addEventListener('keypress', function(event) {
+  if (event.key === 'Enter') {
+    handleSearch();
+  }
+});
+document.querySelector('.search-btn').addEventListener('click', handleSearch);
+
+document.addEventListener('DOMContentLoaded', function() {
+  loadProducts();  
+});
+</script>
+  
+  </script>
+  
+
+</body>
+</html>
