@@ -1,6 +1,5 @@
 from flask import Flask
 import requests
-import schedule
 import time
 import threading
 
@@ -39,23 +38,33 @@ def get_products():
                 })
                 seen_ids.add(product_id)
     return products
-
-def test():
-    print(get_products())
     
 def frequency_crawling():
     # products = get_products()
     url = 'http://db_api:5001/fetch'
     check = requests.get(url).json()
     return check
-        
+
+def get_file_value(file_path):
+    # Mở file và đọc hai dòng
+    with open(file_path, "r") as file:
+        data = file.read()
+        value = int(data)
+        return value               
+
 def run_schedule():
-    # Lập lịch cào dữ liệu mỗi 1 phút
-    schedule.every(1).minutes.do(frequency_crawling)
-    # Lặp vô hạn để duy trì việc lập lịch
+    file_path = '/data_crawling/config.txt'        
     while True:
-        schedule.run_pending()
-        time.sleep(1)
+        time.sleep(get_file_value(file_path))
+        frequency_crawling()
+
+@app.route("/demo")
+def demo():
+    demo = { 
+        "/" : index(),
+        "/get_products": get_products(),
+    }
+    return demo
     
 def main(host='0.0.0.0', port=5000):
     # Khởi tạo và bắt đầu luồng riêng cho lặp lịch
@@ -65,6 +74,4 @@ def main(host='0.0.0.0', port=5000):
     app.run(host=host, port=port)
     
 if __name__ == "__main__":
-#    test()
     main()
-

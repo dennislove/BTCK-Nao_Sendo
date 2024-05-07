@@ -4,10 +4,27 @@ services:
     container_name: mysql_service
     build: ./mysql
     ports:
-      - "6603:3306"
-  mysql_api:
-    container_name: mysql_api_container
-    build: ./mysql
+      - "3306:3306"
+  db_api:
+    container_name: db_api
+    build: ./db_api
     ports:
-      - "9000:8000"
-    
+      - "5001:5001"
+    depends_on:
+      - mysql_service
+  web:     
+    container_name: web
+    build: ./web
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db_api
+  data_crawling:
+    container_name: data_crawling
+    build: ./data_crawling
+    ports:
+      - "5000:5000"
+    depends_on:
+      - db_api
+    volumes:
+      - ./data_crawling:/data_crawling
